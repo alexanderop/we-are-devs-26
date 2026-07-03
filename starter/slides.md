@@ -72,6 +72,18 @@ transition: fade-out
 
 # Raise your hand if you've ever built an app that works offline
 
+<v-click>
+
+## Keep it up if you've heard of local-first
+
+</v-click>
+
+<v-click>
+
+## And who has actually built a local-first app?
+
+</v-click>
+
 <!--
 [scan room]
 
@@ -79,26 +91,7 @@ Quick survey -- how familiar are you?
 
 [wait 3 seconds]
 
-TRANSITION: Now keep those hands up...
--->
-
----
-layout: statement
-transition: fade-out
----
-
-# Keep it up if you've heard of local-first
-
-<v-click>
-
-# And who has actually built a local-first app?
-
-</v-click>
-
-<!--
-[scan room] [wait 3 seconds]
-
-Way fewer hands -- THAT gap is why we're here
+[click] Way fewer hands -- THAT gap is why we're here
 
 [click] Even fewer -- and that's totally fine, that's exactly why this talk exists
 
@@ -109,7 +102,7 @@ Way fewer hands -- THAT gap is why we're here
 
 <PyramidOutline :items="[
   { title: 'The Status Quo', subtitle: 'Vue abstracts the DOM, not the data' },
-  { title: 'Offline-First', subtitle: 'The app that works without WIFI' },
+  { title: 'Offline-First', subtitle: 'The app that works without WiFi' },
   { title: 'Sync Engines', subtitle: 'The new data layer' },
   { title: 'Local-First', subtitle: 'More than just offline' },
   { title: 'Dexie', subtitle: 'Local-first Vue in practice' }
@@ -350,48 +343,22 @@ Vue solved **rendering**. But the data layer? Still the jQuery era. **0 out of 7
 </div>
 
 <!--
-5. Longevity — "Your work should continue to be accessible indefinitely, even after the company that produced the software is gone."
-6. Privacy — "Your local devices store only your own data, avoiding the centralized cloud database holding everybody's data."
-7. User control — "You should be able to copy and modify data in any way, write down any thought, and no company should restrict what you are allowed to do."
+Not random criteria -- these are the 7 ideals from the Ink & Switch local-first paper, 2019.
 
-CLICK -- Not random criteria
-STAT: 7 ideals from Ink & Switch paper, 2019
+[click] Fast -- no spinners, instant response
+[click] Multi-device -- your work on any device
+[click] Works offline -- the network is optional
+[click] Collaboration -- seamless real-time teamwork
+[click] Longevity -- your work survives even the company shutting down
+[click] Privacy -- your device holds only your own data
+[click] User control -- copy it, modify it, no company restricts you
 
-CLICK -- Typical Vue app? ZERO out of seven
+[click] Typical Vue app? ZERO out of seven.
+
+[click] Source: the Ink & Switch essay -- the founding document of this movement.
 
 [pause] [look up]
-Rendering = solved. Data layer = not started.
-Let's change that.
-
-[wait for reaction]
--->
-
----
-
-# How Do Today's Web Apps Score?
-
-<WebAppsScorecard />
-
-<div class="mt-3 text-center text-sm text-gray-500">
-
-Source: <a href="https://www.inkandswitch.com/essay/local-first/" target="_blank" style="color: #ff6bed">"Local-First Software"</a> — Ink & Switch, 2019
-
-</div>
-
-<!--
-From the original Ink & Switch paper -- how do REAL apps score?
-
-Google Docs. Fast? Depends on connection. Multi-device, collaboration? Yes. Offline? Partial. Privacy? No -- Google reads your data.
-
-Trello. Similar story. No privacy, no user control.
-
-Pinterest. Even worse. Fully cloud-dependent.
-
-Dropbox. Different pattern! Fast, longevity, user control -- but no real-time collaboration.
-
-Git + GitHub. Best score so far! Fast, offline, longevity, user control. But collaboration is only partial -- merge conflicts, anyone?
-
-Notice: NO app gets all seven. Cloud apps nail collaboration but fail privacy/control. Dev tools nail control but fail collaboration. That's the gap local-first fills.
+Rendering = solved. Data layer = not started. Let's change that.
 
 TRANSITION: Let's start fixing this -- offline-first.
 -->
@@ -410,7 +377,7 @@ Syncs to server when it can
 -->
 
 ---
-clicks: 7
+clicks: 5
 ---
 
 # Local Storage Options
@@ -418,52 +385,34 @@ clicks: 7
 <StorageFunnelDiagram
   :rejected="[
     { id: 'ss', label: 'sessionStorage', subtitles: ['Tab-scoped only', 'Gone on close', '~5 MB limit'], status: 'rejected', click: 1 },
-    { id: 'ls', label: 'localStorage', subtitles: ['~5 MB limit', 'Sync API (blocks UI)', 'Strings only'], status: 'rejected', click: 2 },
-    { id: 'ck', label: 'Cookies', subtitles: ['~4 KB limit', 'Sent with every request', 'Not for app data'], status: 'rejected', click: 3 },
+    { id: 'ls', label: 'localStorage', subtitles: ['~5 MB limit', 'Sync API (blocks UI)', 'Strings only'], status: 'rejected', click: 1 },
+    { id: 'ck', label: 'Cookies', subtitles: ['~4 KB limit', 'Sent with every request', 'Not for app data'], status: 'rejected', click: 1 },
   ]"
   :accepted="[
-    { id: 'idb', label: 'IndexedDB', subtitles: ['Generous storage quota', 'Async API', 'Structured data'], status: 'accepted', click: 4 },
-    { id: 'sql', label: 'SQLite (WASM)', subtitles: ['Full SQL queries', 'OPFS persistence', '~900KB bundle'], status: 'accepted', click: 5 },
-    { id: 'pg', label: 'PGlite (Postgres WASM)', subtitles: ['Full Postgres in the browser', 'pgvector & extensions', '<3MB gzipped'], status: 'accepted', click: 6 },
+    { id: 'idb', label: 'IndexedDB', subtitles: ['Generous storage quota', 'Async API', 'Structured data'], status: 'accepted', click: 2 },
+    { id: 'sql', label: 'SQLite (WASM)', subtitles: ['Full SQL queries', 'OPFS persistence', '~900KB bundle'], status: 'accepted', click: 3 },
+    { id: 'pg', label: 'PGlite (Postgres WASM)', subtitles: ['Full Postgres in the browser', 'pgvector & extensions', '<3MB gzipped'], status: 'accepted', click: 4 },
   ]"
   summary="For local-first: IndexedDB (native), SQLite WASM (SQL power), or PGlite (full Postgres)"
-  :summary-click="7"
+  :summary-click="5"
 />
 
 <!--
-sessionStorage. Tab-scoped. Close tab = gone.
+[click] The usual suspects -- all dead ends. sessionStorage dies with the tab. localStorage: 5 MB, blocking, strings only. Cookies: 4 KB, sent with every request. None can hold app data.
 
-localStorage. 5 MB, sync API, strings only. Not enough.
-
-Cookies. 4 KB. Not for app data.
-
-IndexedDB. NOW we're talking. Unlimited, async, structured.
+[click] IndexedDB. NOW we're talking. Generous quota, async, structured.
 Remember this one -- Dexie is built on it.
 
-SQLite WASM. Full SQL in WebAssembly. Uses OPFS -- Origin Private File System -- for persistence.
+[click] SQLite WASM. Full SQL in WebAssembly. Uses OPFS -- Origin Private File System -- for persistence.
 
-PGlite. Full Postgres in WASM, <3MB gzipped. pgvector + extensions.
+[click] PGlite. Full Postgres in WASM, <3MB gzipped. pgvector + extensions.
 
-Bottom line: IndexedDB, SQLite WASM, or PGlite.
+[click] Bottom line: IndexedDB, SQLite WASM, or PGlite.
 Most sync engines pick one for you.
--->
 
----
-layout: center
----
+(If browser SQLite intrigues you: Conrad Hofmeyr's "SQLite Persistence on the Web" talk -- it's in my awesome-local-first repo, QR at the end.)
 
-# Want to go deeper on SQLite?
-
-<div class="flex flex-col items-center">
-  <a href="https://www.youtube.com/watch?v=7yNG1aj7-Aw" target="_blank" class="!border-none">
-    <img src="/sqlite-persistence-youtube.jpg" class="w-140 rounded shadow-lg" />
-  </a>
-  <p class="mt-2 opacity-70">Conrad Hofmeyr (PowerSync) - "SQLite Persistence on the Web" @ Sync Conf 2025</p>
-</div>
-
-<!--
-Quick shout-out -- if SQLite in the browser sounds interesting,
-this talk goes deep on how persistence actually works.
+TRANSITION: So data can live locally. Here's the architecture around it...
 -->
 
 ---
@@ -568,27 +517,10 @@ Without PWA = dino
 With PWA = Service Worker intercepts, serves from cache
 
 [look up] PWA is the foundation. Data layer sits on top.
--->
 
----
+(I have a blog post on PWA + Vue 3 + Vite -- 4 steps, alexop.dev, QR at the end.)
 
-# Want to Learn More About PWAs?
-
-<div class="grid grid-cols-2 gap-8 mt-8 items-center">
-  <div class="flex flex-col items-center">
-    <img src="/pwa-blog-post.png" class="rounded-lg shadow-xl border border-gray-700" />
-  </div>
-  <div class="flex flex-col items-center">
-    <img src="/pwa-blog-qr.png" class="w-60 rounded-lg" />
-    <div class="mt-4 text-sm op-50">
-      Scan to read the post
-    </div>
-  </div>
-</div>
-
-<!--
-PWA + Vue 3 + Vite -- blog post, 4 steps
-Scan QR later
+TRANSITION: Stack all three layers and it looks like this...
 -->
 
 ---
@@ -660,7 +592,12 @@ Now things get REALLY interesting
 -->
 
 ---
+clicks: 1
 ---
+
+<div class="relative h-full">
+
+<div v-click-hide="1" class="absolute inset-0 flex items-center justify-center">
 
 <ClientServerDiagram
   :clients="[
@@ -675,15 +612,9 @@ Now things get REALLY interesting
   :seed="300"
 />
 
-<!--
-[gesture] Traditional: every client talks to server via HTTP
-Server = single source of truth
+</div>
 
-Works -- but network goes away?
--->
-
----
----
+<div v-click="1" class="absolute inset-0 flex items-center justify-center">
 
 <ClientServerDiagram
   :clients="[
@@ -712,27 +643,20 @@ Works -- but network goes away?
   :seed="310"
 />
 
-<!--
-[gesture] Now: each client has LOCAL DB + sync layer
-Read/write locally -- instant
-Sync client handles replication in background
+</div>
 
-THIS is what sync engines give you
-
-TRANSITION: But here's the fundamental question...
--->
-
----
-layout: statement
-transition: fade
----
-
-# The Fundamental Problem
-
-<div class="mt-4 text-xl op-70">Two devices go offline. Both edit the same data. How do you merge?</div>
+</div>
 
 <!--
-Two devices, same data, offline edits - how do you merge?
+[gesture] Traditional: every client talks to the server via HTTP.
+Server = single source of truth. Works -- but network goes away?
+
+[click] Now: each client has a LOCAL DB + sync layer.
+Read/write locally -- instant. Sync client replicates in the background.
+
+THIS is what sync engines give you.
+
+But it raises the fundamental question: two devices go offline, both edit the same data -- how do you merge?
 
 TRANSITION: Turns out there's a whole spectrum of answers...
 -->
@@ -928,30 +852,11 @@ transition: fade
 
 We just saw Linear, Figma, Notion -- incredible apps.
 Sync engines, offline, fast.
-But something's missing.
-
-TRANSITION: What separates offline-first from local-first?
--->
-
----
-layout: statement
-transition: fade-out
----
-
-# But Are These Truly Local-First?
-
-<div v-click class="mt-8 text-xl op-80">
-
-Martin Kleppmann defines truly local-first with three criteria.
-
-</div>
-
-<!--
-Linear, Figma, Notion -- great sync. Great offline.
 But are they truly LOCAL-FIRST?
 
-CLICK -- Martin Kleppmann (Ink & Switch, Automerge)
-Boils it down to THREE criteria
+Martin Kleppmann -- Ink & Switch, Automerge -- boils it down to THREE criteria.
+
+TRANSITION: Here they are...
 -->
 
 ---
@@ -1297,7 +1202,7 @@ layout: code-editor
 project: vue-dexie-todo
 activeFile: db.ts
 tabs: db.ts
-step: 1/5 Database
+step: 1/4 Database
 transition: fade
 clicks: 4
 files: |
@@ -1420,7 +1325,7 @@ layout: code-editor
 project: vue-dexie-todo
 activeFile: db.ts
 tabs: db.ts
-step: 2/5 Cloud Sync
+step: 2/4 Cloud Sync
 transition: fade
 clicks: 3
 files: |
@@ -1548,7 +1453,7 @@ layout: code-editor
 project: vue-dexie-todo
 activeFile: useTodos.ts
 tabs: db.ts, useTodos.ts
-step: 3/5 Composable
+step: 3/4 Composable
 transition: fade
 clicks: 5
 openFolders: src, composables
@@ -1696,7 +1601,7 @@ layout: code-editor
 project: vue-dexie-todo
 activeFile: TodoList.vue
 tabs: useTodos.ts, TodoList.vue
-step: 4/5 Component
+step: 4/4 Component
 transition: fade
 clicks: 3
 openFolders: src, composables, components
@@ -1863,150 +1768,7 @@ CLICK -- Dexie compares timestamps (adjusted for client clock skew): the later w
 
 That's the whole model: per-field merge when possible, last-write-wins when not, deletes win. Three rules -- no CRDT math, no merge UI.
 
-TRANSITION: Same story, now in code.
--->
-
----
-layout: code-editor
-project: vue-dexie-todo
-activeFile: db.ts
-tabs: db.ts
-step: 5/5 Conflicts
-transition: fade
-clicks: 2
-files: |
-  src
-    main.ts
-    db.ts
-    composables/
-      useTodos.ts
-    components/
-      TodoList.vue
-    App.vue
-  package.json
-  vite.config.ts
----
-
-````md magic-move {lines: true}
-```ts
-// Two devices, offline, same todo...
-
-// Device A
-await db.todos.update(id, { title: 'Buy oat milk' })
-
-// Device B
-await db.todos.update(id, { completed: true })
-```
-```ts
-// Two devices, offline, same todo...
-
-// Device A
-await db.todos.update(id, { title: 'Buy oat milk' })
-
-// Device B
-await db.todos.update(id, { completed: true })
-
-// After sync - DIFFERENT fields merge automatically
-{ id, title: 'Buy oat milk', completed: true }
-```
-```ts
-// Same field? Last write wins - server order decides.
-
-// Device A
-await db.todos.update(id, { title: 'Buy oat milk' })
-
-// Device B
-await db.todos.update(id, { title: 'Buy almond milk' })
-
-// After sync - whoever reached the server last wins
-{ id, title: 'Buy almond milk', completed: false }
-
-// And deletes ALWAYS win over updates - no zombie records
-await db.todos.delete(id)
-```
-````
-
-<!--
-You just saw the picture -- here's the exact same scenario in code.
-
-Device A renames the todo. Device B checks it off. Both offline.
-
-CLICK: After sync, BOTH changes survive. Dexie tracks changes per FIELD, not per record. Different fields merge automatically - this covers most real-world conflicts.
-
-CLICK: Same field though? Last write wins, in server arrival order. Simple, predictable - but yes, one intent is lost. And deletes always beat updates, so no zombie records reappearing after sync.
-
-That's the trade-off: no CRDT math, no manual merge UI - just three rules you can explain in one slide.
-
 TRANSITION: Step back and look at what we did NOT write...
--->
-
----
-clicks: 1
----
-
-# The Line That Replaces Your Entire API
-
-<div class="grid grid-cols-2 gap-8 mt-6">
-
-<div v-click="1">
-
-<Card variant="muted">
-
-<div class="text-sm font-bold text-brand mb-2">Traditional Vue</div>
-
-```ts
-async function addTodo(title: string) {
-  const opt = store.addOptimistic(title)
-  try {
-    await axios.post('/api/todos', {
-      title,
-    })
-    socket.emit('todoAdded', title)
-  } catch (e) {
-    store.rollback(opt)
-  }
-}
-```
-
-<div class="mt-2 text-xs op-50">Pinia + axios + socket.io + error handling</div>
-
-</Card>
-
-</div>
-
-<div v-click="1">
-
-<Card glow>
-
-<div class="text-sm font-bold text-brand mb-2">Dexie</div>
-
-```ts
-// Create - synced to every device
-await db.todos.add({ title })
-
-// Reactive read - local & remote
-liveQuery(() => db.todos.toArray())
-
-// Full change log per table
-// ($todos_mutations in DevTools)
-```
-
-</Card>
-
-</div>
-
-</div>
-
-<!--
-[pause] Let that sink in.
-
-CLICK -- On the left: what you'd write today. Pinia for state, axios for the API call, socket.io for real-time, plus rollback on error. Five dependencies. Six lines of plumbing.
-
-On the right: db.todos.add. Dexie handles persistence, sync, offline queueing, and conflict resolution. Open DevTools > IndexedDB and you'll even see the mutation log tables it keeps per table.
-
-[look up] THIS is the promise of local-first. Not "offline mode." Not "cache layer." Your entire data plumbing - gone.
-
-TRANSITION: Here's the full list of what you didn't build...
 -->
 
 ---
@@ -2232,7 +1994,24 @@ CLICK -- fairness cuts both ways: with these YOU run the server, the upgrades, t
 
 Full list: my awesome-local-first repo -- QR code at the end.
 
-TRANSITION: So what can you do today?
+TRANSITION: Before you rush off and rewrite everything -- is your app even a FIT?
+-->
+
+---
+
+# Local-First Software Fit Guide
+
+<FitGuideDiagram />
+
+<!--
+Good fit: apps where users CREATE and OWN their data. File editing, productivity tools - the user IS the source of truth.
+
+Bad fit: anything involving real-world resources that need a central authority.
+Money: "An offline banking app that lets you initiate a transfer with an out-of-date balance is dangerous" (RxDB)
+Inventory: two warehouses claiming the last item - CRDTs can't resolve this automatically.
+Vehicles: ride-sharing needs central arbitration for matching.
+
+TRANSITION: If your app fits -- here's what you can do today.
 -->
 
 ---
@@ -2258,7 +2037,7 @@ Upgrade = config change, not rewrite.
 
 CLICK -- [look up] Not betting on a vendor. Betting on a PATTERN.
 
-TRANSITION: The rendering era is over...
+TRANSITION: Grab the code before you go...
 -->
 
 ---
@@ -2326,32 +2105,16 @@ class: flex items-center justify-center h-full
 />
 
 <!--
-CLICK -- jQuery: YOU were the sync engine
+The whole talk in one picture. [walk the timeline left to right]
 
-CLICK -- Vue: FRAMEWORK syncs the DOM
+jQuery: YOU were the sync engine.
+Vue: the FRAMEWORK syncs the DOM.
+Sync engines: the ENGINE syncs the data.
+Local-first: the USER owns the data.
 
-CLICK -- Sync engines: ENGINE syncs the data
-
-CLICK -- Local-first: USER owns the data
-
-CLICK -- [slow down] [look up]
+[slow down] [look up]
 We solved rendering. Data layer = where it's happening NOW.
 Vue is perfectly POSITIONED.
--->
-
----
-
-# Local-First Software Fit Guide
-
-<FitGuideDiagram />
-
-<!--
-Good fit: apps where users CREATE and OWN their data. File editing, productivity tools - the user IS the source of truth.
-
-Bad fit: anything involving real-world resources that need a central authority.
-Money: "An offline banking app that lets you initiate a transfer with an out-of-date balance is dangerous" (RxDB)
-Inventory: two warehouses claiming the last item - CRDTs can't resolve this automatically.
-Vehicles: ride-sharing needs central arbitration for matching.
 -->
 
 ---
