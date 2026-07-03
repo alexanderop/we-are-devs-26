@@ -3,7 +3,7 @@ const {
   name = 'Alex Opalic',
   avatar = 'https://avatars.githubusercontent.com/u/33398393?v=4',
   items = [
-    '🚀 7 years building with Vue',
+    '🚀 8 years building with Vue',
     '💼 Developer at Otto Payments',
     '🏡 Based in Geretsried (south of Munich, Bavaria)',
     '✍️ Blogger at alexop.dev',

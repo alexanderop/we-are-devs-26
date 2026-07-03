@@ -23,6 +23,7 @@
   },
   "dependencies": {
     "@vueuse/core": "^14.2.1",
+    "dexie": "^4.4.4",
     "roughjs": "^4.6.6"
   },
   "peerDependencies": {

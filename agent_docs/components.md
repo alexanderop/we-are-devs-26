@@ -112,6 +112,16 @@ Two-panel before/after card with variant-colored borders and headers. Slots: `#l
 ### VuePlayground
 Embedded Vue playground/REPL (`VuePlayground.vue`).
 
+### DexieTodoApp
+Real, working todo app backed by Dexie.js (IndexedDB) — for live demos during local-first talks, not a mockup. Defines a module-scope `TodoDB` (Dexie db named `SlideTodoDB`, `todos` table) and a singleton `db` instance shared across mounts (Slidev overview/presenter mode can mount the component more than once), reactively synced via `liveQuery(...).subscribe()`. SSR-safe: `db` is only created when `window` exists. Data persists in the browser's IndexedDB across reloads until "Reset" is clicked or the browser storage is cleared.
+
+```md
+<DexieTodoApp />
+<DexieTodoApp title="my todos" />
+```
+
+Props: `title='todos'` (header label only). No emits. Features: add via input + Enter/button, checkbox toggle (line-through when done), per-row delete (✕, shown on hover), "N open · M total" footer count, and a "Reset" button that clears the table for rehearsals.
+
 ## Addon layouts (`packages/slidev-addon-utils/layouts/`)
 
 ### TwoCols

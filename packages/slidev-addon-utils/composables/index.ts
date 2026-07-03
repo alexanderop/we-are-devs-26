@@ -1,6 +1,7 @@
 export { useRough, useRoughContext } from './useRough'
 export type { PathInfo } from './useRough'
 export { useClickStep } from './useClickStep'
+export { useClickVisibility } from './useClickVisibility'
 export { ROUGH_GENERATOR_KEY, ROUGHNESS_KEY, SEED_KEY, THEME_KEY, DIAGRAM_NODES_KEY } from './keys'
 export type { DiagramNodeBox } from './keys'
 export { hashId } from '../utils/hash'
