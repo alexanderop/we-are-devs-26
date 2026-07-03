@@ -36,7 +36,7 @@ TRANSITION: Quick intro...
 ---
 
 <div class="flex items-center justify-center h-full">
-  <img src="/manly-handshake.gif" class="max-h-full max-w-full rounded-lg" />
+  <img src="/thanks-for-being-early.png" class="max-h-full max-w-full rounded-lg" />
 </div>
 
 ---
