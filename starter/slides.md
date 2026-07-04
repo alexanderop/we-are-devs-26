@@ -19,6 +19,12 @@ backgroundSize: contain
 
 ---
 
+<div class="flex items-center justify-center h-full">
+  <img src="/thanks-for-being-early.png" class="max-h-full max-w-full rounded-lg" />
+</div>
+
+---
+
 <PartSlide title="How to Build Local-First Apps with Vue" subtitle="WeAreDevelopers 2026 - Alexander Opalic" />
 
 <!--
@@ -33,11 +39,6 @@ Introductory talk -- build your own by the end
 TRANSITION: Quick intro...
 -->
 
----
-
-<div class="flex items-center justify-center h-full">
-  <img src="/thanks-for-being-early.png" class="max-h-full max-w-full rounded-lg" />
-</div>
 
 ---
 
