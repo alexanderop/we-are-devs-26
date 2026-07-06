@@ -984,6 +984,45 @@ TRANSITION: But first -- the problem Dexie actually solves...
 
 ---
 
+# First Instinct: localStorage
+
+<div class="mt-1 text-base op-70">Everyone's first offline storage. Let's save one todo.</div>
+
+<div class="mt-4">
+
+```ts {monaco-run} {autorun:false}
+const todo = { title: 'Buy milk', completed: false }
+
+localStorage.setItem('todo', todo as any)
+
+console.log(localStorage.getItem('todo'))
+```
+
+</div>
+
+<v-clicks>
+
+- So you `JSON.stringify` every write and `JSON.parse` every read -- the <strong>whole dataset, every time</strong>
+- ~5 MB quota, strings only, synchronous -- every call blocks the main thread
+
+</v-clicks>
+
+<!--
+Everyone's first idea for offline data -- localStorage. Let's actually try it, live.
+
+[press Run] There it is: "[object Object]". localStorage flattened our todo to a useless string. Even TypeScript tried to stop us -- see the "as any"?
+
+(!) After clicking Run, click an empty spot on the slide -- arrow keys don't advance while the editor has focus.
+
+[click] The usual fix is the stringify/parse dance -- but there are no partial updates. One field changes? Serialize the entire dataset again.
+
+[click] Add the ~5 MB quota and that it's synchronous -- blocking the main thread on every call -- and localStorage is out for anything beyond a settings flag.
+
+TRANSITION: The fix has been sitting in your browser the whole time...
+-->
+
+---
+
 # Your Browser Already Ships a Database
 
 <div class="mt-1 text-base op-70">IndexedDB: gigabytes of real objects, in every browser since 2012. <span class="text-brand font-bold">The API is why nobody uses it.</span></div>
@@ -1017,12 +1056,19 @@ req.onsuccess = () => {
 
 ```ts
 const db = new Dexie('TodoDB')
-db.version(1).stores({ todos: '++id' })
+db.version(1).stores({ todos: '++id, completed' })
 
-await db.todos.add({ title: 'Buy milk' })
+await db.todos.add({
+  title: 'Buy milk', completed: 0,
+})
+
+// it's a database - so query it
+const open = await db.todos
+  .where('completed').equals(0)
+  .toArray()
 ```
 
-<div class="mt-2 text-xs op-50">Same database underneath - localStorage-easy on top</div>
+<div class="mt-2 text-xs op-50">Same database underneath - and it answers queries, not just get/set</div>
 
 </template>
 
@@ -1031,11 +1077,11 @@ await db.todos.add({ title: 'Buy milk' })
 </div>
 
 <!--
-Quick anchor: you all know localStorage. Now imagine localStorage could hold GIGABYTES, store real objects, and answer queries. That exists -- it's called IndexedDB, and it's been in every browser for over a decade.
+That [object Object] you just saw? The browser's actual answer to it has been shipping since 2012: IndexedDB. Gigabytes of quota, real JavaScript objects, async, indexed. Not a key-value store -- a mini database that can index, search, and QUERY your data.
 
-[point left] And THIS is why nobody uses it raw. Requests, event handlers, manual transactions. Eight lines to save one object.
+[point left] And THIS is why nobody uses it raw. Requests, event handlers, manual transactions. Eight lines to save one object -- a 2010 API.
 
-[point right] Dexie is the API IndexedDB should have had. Same database underneath -- two lines to save an object, and it's a promise, so it awaits like everything else in your Vue code.
+[point right] Dexie is the API IndexedDB should have had. Same database underneath -- two lines to save an object, it's a promise so it awaits like everything else in your Vue code. And look at the bottom: an indexed query. "All open todos" -- no stringify, no filtering an array in JS. THAT's the difference between storage and a database.
 
 That's the whole pitch: the browser's built-in database, without hating it.
 
@@ -1173,6 +1219,8 @@ This isn't a mockup or a screen recording -- it's the actual app we're about to 
 
 [gesture] Add a todo live. Now reload the page -- the slide remounts, the component re-renders from scratch... and the todo is still there. No server, no localStorage trick. That's IndexedDB, doing its job.
 
+[press Seed 10k] And the party trick: ten thousand todos, bulk-inserted in a blink. Watch the footer -- the query stays at a millisecond or two. That's what an INDEXED database buys you. localStorage would stringify and re-parse the whole array on every single change -- ten thousand todos would freeze the tab.
+
 TRANSITION: So where did that todo actually go?
 -->
 
@@ -1194,6 +1242,8 @@ transition: fade
 Open DevTools, Application tab, Storage, IndexedDB. There's our database -- SlideTodoDB -- and the todos table, with the row we just added sitting right there.
 
 No inspector plugin, no special tooling. This is built into every browser. Title, completed, createdAt -- exactly the shape we defined.
+
+Pro-tip: it's not limited to JSON-shaped data either. IndexedDB stores Blobs natively -- images, files, audio go straight in, no base64. One rule: never INDEX a blob field. Index the metadata next to it (filename, size, date) and keep the blob as payload.
 
 TRANSITION: Now the fun part -- the schema.
 -->

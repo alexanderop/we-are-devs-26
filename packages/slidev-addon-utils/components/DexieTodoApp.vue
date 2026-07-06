@@ -36,17 +36,31 @@ const { title = 'todos' } = defineProps<{
   title?: string
 }>()
 
+// Only the latest rows go into the DOM - the seed demo inserts 10k records
+const DISPLAY_LIMIT = 50
+const SEED_COUNT = 10_000
+
 const todos = ref<Todo[]>([])
+const totalCount = ref(0)
+const queryMs = ref(0)
 const newTitle = ref('')
+const seeding = ref(false)
 let subscription: Subscription | undefined
 
 onMounted(() => {
   if (!db) return
-  subscription = liveQuery(() =>
-    db!.todos.orderBy('createdAt').toArray(),
-  ).subscribe({
+  subscription = liveQuery(async () => {
+    const start = performance.now()
+    const [items, count] = await Promise.all([
+      db!.todos.orderBy('createdAt').reverse().limit(DISPLAY_LIMIT).toArray(),
+      db!.todos.count(),
+    ])
+    return { items, count, ms: performance.now() - start }
+  }).subscribe({
     next: (value) => {
-      todos.value = value
+      todos.value = value.items
+      totalCount.value = value.count
+      queryMs.value = value.ms
     },
     error: (err) => {
       console.error('DexieTodoApp liveQuery error:', err)
@@ -82,6 +96,27 @@ async function deleteTodo(id?: number) {
 async function resetAll() {
   if (!db) return
   await db.todos.clear()
+}
+
+const SEED_VERBS = ['Review', 'Refactor', 'Ship', 'Test', 'Document', 'Deploy', 'Debug', 'Merge']
+const SEED_NOUNS = ['the sync engine', 'liveQuery', 'the schema', 'conflict handling', 'the offline queue', 'the PWA shell', 'the demo app', 'IndexedDB']
+
+async function seedTodos() {
+  if (!db || seeding.value) return
+  seeding.value = true
+  try {
+    // Backdated timestamps keep seeded rows below anything typed live
+    const base = Date.now() - SEED_COUNT * 1000
+    const batch: Todo[] = Array.from({ length: SEED_COUNT }, (_, i) => ({
+      title: `${SEED_VERBS[i % SEED_VERBS.length]} ${SEED_NOUNS[(i >> 3) % SEED_NOUNS.length]} #${i + 1}`,
+      completed: i % 3 === 0,
+      createdAt: new Date(base + i * 1000),
+    }))
+    await db.todos.bulkAdd(batch)
+  }
+  finally {
+    seeding.value = false
+  }
 }
 </script>
 
@@ -131,16 +166,24 @@ async function resetAll() {
           ✕
         </button>
       </div>
+      <div v-if="totalCount > todos.length" class="truncate-note">
+        showing latest {{ todos.length }}
+      </div>
     </div>
 
     <!-- Footer -->
     <div class="app-footer">
       <span class="count-label">
-        {{ todos.filter(t => !t.completed).length }} open · {{ todos.length }} total
+        {{ totalCount.toLocaleString('en-US') }} todos · query {{ queryMs < 1 ? '<1' : Math.round(queryMs) }} ms
       </span>
-      <button class="reset-btn" @click="resetAll">
-        Reset
-      </button>
+      <div class="footer-actions">
+        <button class="seed-btn" :disabled="seeding" @click="seedTodos">
+          {{ seeding ? 'Seeding…' : 'Seed 10k' }}
+        </button>
+        <button class="reset-btn" @click="resetAll">
+          Reset
+        </button>
+      </div>
     </div>
   </div>
 </template>
@@ -309,7 +352,45 @@ async function resetAll() {
   color: rgba(248, 113, 113, 0.95);
 }
 
+.truncate-note {
+  padding: 6px 16px;
+  text-align: center;
+  font-family: 'Geist Mono', monospace;
+  font-size: 10px;
+  color: rgba(234, 237, 243, 0.3);
+}
+
 /* ---- Footer ---- */
+.footer-actions {
+  display: flex;
+  gap: 6px;
+}
+
+.seed-btn {
+  font-family: 'Geist Mono', monospace;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: rgba(255, 107, 237, 0.85);
+  background: transparent;
+  border: 1px solid rgba(255, 107, 237, 0.3);
+  border-radius: 6px;
+  padding: 3px 8px;
+  cursor: pointer;
+  transition: color 0.15s ease, border-color 0.15s ease, background 0.15s ease;
+}
+
+.seed-btn:hover:not(:disabled) {
+  background: rgba(255, 107, 237, 0.1);
+  border-color: rgba(255, 107, 237, 0.5);
+}
+
+.seed-btn:disabled {
+  opacity: 0.5;
+  cursor: wait;
+}
+
 .app-footer {
   display: flex;
   align-items: center;
