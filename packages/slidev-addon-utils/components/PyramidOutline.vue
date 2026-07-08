@@ -9,7 +9,6 @@ defineProps<{
     <div
       v-for="(item, i) in items"
       :key="i"
-      v-click
       class="outline__item"
     >
       <span class="outline__number">{{ String(i + 1).padStart(2, '0') }}</span>
@@ -41,11 +40,6 @@ defineProps<{
   padding: 10px 0;
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-:global(.slidev-vclick-hidden).outline__item {
-  transform: translateY(12px) !important;
-  opacity: 0;
 }
 
 .outline__number {

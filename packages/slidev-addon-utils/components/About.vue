@@ -3,7 +3,7 @@ const {
   name = 'Alex Opalic',
   avatar = 'https://avatars.githubusercontent.com/u/33398393?v=4',
   items = [
-    '🚀 8 years building with Vue',
+    '🚀 8 years building with as a Full Stack Developer',
     '💼 Developer at Otto Payments',
     '🏡 Based in Geretsried (south of Munich, Bavaria)',
     '✍️ Blogger at alexop.dev',
@@ -23,11 +23,11 @@ const {
       <h2 class="mt-4">{{ name }}</h2>
     </div>
     <div>
-      <VClicks class="space-y-2 mt-10 text-xl">
+      <div class="space-y-2 mt-10 text-xl">
         <ul>
           <li v-for="item in items" :key="item">{{ item }}</li>
         </ul>
-      </VClicks>
+      </div>
     </div>
   </div>
 </template>

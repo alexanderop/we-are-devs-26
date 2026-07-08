@@ -47,11 +47,10 @@ TRANSITION: Quick intro...
 <About
   avatar="/alex-speaking.png"
   :items="[
-    '🚀 8 years building with Vue',
+    '🚀 8 years as a Full Stack Developer',
     '💼 Developer at Otto Payments',
     '🏡 Based near Munich, Bavaria 🇩🇪',
-    '✍️ Blogging at alexop.dev — Vue, testing & AI',
-    '🤖 Deep into AI &amp; Claude Code',
+    '✍️ Blogging at alexop.dev  Vue, testing & AI',
     '🎤 Speaking about local-first, Vue & the craft of building',
   ]"
 />
