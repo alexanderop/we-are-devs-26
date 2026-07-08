@@ -981,45 +981,6 @@ TRANSITION: But first -- the problem Dexie actually solves...
 
 ---
 
-# First Instinct: localStorage
-
-<div class="mt-1 text-base op-70">Everyone's first offline storage. Let's save one todo.</div>
-
-<div class="mt-4">
-
-```ts {monaco-run} {autorun:false}
-const todo = { title: 'Buy milk', completed: false }
-
-localStorage.setItem('todo', todo as any)
-
-console.log(localStorage.getItem('todo'))
-```
-
-</div>
-
-<v-clicks>
-
-- So you `JSON.stringify` every write and `JSON.parse` every read -- the <strong>whole dataset, every time</strong>
-- ~5 MB quota, strings only, synchronous -- every call blocks the main thread
-
-</v-clicks>
-
-<!--
-Everyone's first idea for offline data -- localStorage. Let's actually try it, live.
-
-[press Run] There it is: "[object Object]". localStorage flattened our todo to a useless string. Even TypeScript tried to stop us -- see the "as any"?
-
-(!) After clicking Run, click an empty spot on the slide -- arrow keys don't advance while the editor has focus.
-
-[click] The usual fix is the stringify/parse dance -- but there are no partial updates. One field changes? Serialize the entire dataset again.
-
-[click] Add the ~5 MB quota and that it's synchronous -- blocking the main thread on every call -- and localStorage is out for anything beyond a settings flag.
-
-TRANSITION: The fix has been sitting in your browser the whole time...
--->
-
----
-
 # Your Browser Already Ships a Database
 
 <div class="mt-1 text-base op-70">IndexedDB: gigabytes of real objects, in every browser since 2012. <span class="text-brand font-bold">The API is why nobody uses it.</span></div>
@@ -2084,44 +2045,6 @@ CLICK -- Watch this space. Generic sync protocol coming.
 Upgrade = config change, not rewrite.
 
 CLICK -- [look up] Not betting on a vendor. Betting on a PATTERN.
-
-TRANSITION: Grab the code before you go...
--->
-
----
-
-# Grab the Code
-
-<div class="grid grid-cols-2 gap-8 mt-10 items-center">
-
-<Card glow class="!px-6 !py-5">
-  <div class="flex items-center gap-3">
-    <div class="i-ph-github-logo text-3xl" />
-    <div>
-      <div class="text-lg font-bold" style="color: #ff6bed">alexanderop/vue-dexie</div>
-      <div class="text-xs op-60 mt-1">The complete todo app from this talk - Vue 3 + Dexie + Dexie Cloud</div>
-    </div>
-  </div>
-</Card>
-
-<Card variant="muted" class="!px-6 !py-5">
-  <div class="flex items-center gap-3">
-    <div class="i-ph-article text-3xl" />
-    <div>
-      <div class="text-lg font-bold">alexop.dev</div>
-      <div class="text-xs op-60 mt-1">"Building Local-First Apps with Vue and Dexie.js" - the written version, with all the details</div>
-    </div>
-  </div>
-</Card>
-
-</div>
-
-<!--
-Everything from part 4 is real, running code.
-
-github.com/alexanderop/vue-dexie -- clone it, add your own Dexie Cloud URL, and you have a syncing, offline-capable app in minutes.
-
-The blog post on alexop.dev walks through the same build in writing, plus the IndexedDB internals we skipped.
 
 TRANSITION: One more thing...
 -->
