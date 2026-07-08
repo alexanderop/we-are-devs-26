@@ -883,25 +883,25 @@ TRANSITION: Let's compare offline-first and local-first directly...
 
 ---
 layout: two-cols
+clicks: 1
 ---
 
-<div class="h-full flex flex-col justify-center">
+<div class="h-full flex flex-col justify-center items-center text-center">
 
 ## Offline-First Asks
 
-"How do I keep working without a server?"
+<div class="h-18 flex items-center justify-center">"How do I keep working without a server?"</div>
 
-<Card variant="muted" size="lg" class="mt-8 text-center">
+<RoughSvg :width="360" :height="250" :padding="14" :seed="41" class="mt-4">
+  <RoughNode id="server-off" :x="95" :y="0" :width="170" :height="70" label="Server" sublabel="the owner 👑" variant="success" />
+  <RoughNode id="client-off" :x="105" :y="170" :width="150" :height="64" label="Client" sublabel="just a cache" variant="muted" />
+  <RoughEdge from="client-off" to="server-off" from-side="right" to-side="right" label="write" :label-dx="34" :label-dy="0" />
+  <RoughEdge from="server-off" to="client-off" from-side="left" to-side="left" label="✗ rollback" :label-dx="-44" :label-dy="0" stroke="rgba(248, 113, 113, 0.8)" stroke-dasharray="6 5" />
+</RoughSvg>
 
-<span v-mark="{ type: 'highlight', color: '#ff6bed' }" class="font-bold">Server</span> is the owner
+<div class="mt-3 text-sm op-70">
 
-Client is a cache
-
-</Card>
-
-<div class="mt-4 text-sm op-70">
-
-If server rejects your write → client rolls back
+Server rejects your write → client rolls back
 
 </div>
 
@@ -909,25 +909,22 @@ If server rejects your write → client rolls back
 
 ::right::
 
-<div class="h-full flex flex-col justify-center">
+<div v-click class="h-full flex flex-col justify-center items-center text-center">
 
 ## Local-First Asks
 
-"Why does the server own my data at all?"
+<div class="h-18 flex items-center justify-center">"Why does the server own my data at all?"</div>
 
-<Card variant="muted" size="lg" class="mt-8 text-center">
+<RoughSvg :width="360" :height="250" :padding="14" :seed="42" class="mt-4">
+  <RoughNode id="you-loc" :x="95" :y="0" :width="170" :height="70" label="YOU" sublabel="the owner 👑" variant="accent" />
+  <RoughNode id="server-loc" :x="105" :y="170" :width="150" :height="64" label="Server" sublabel="just a utility" variant="muted" />
+  <RoughEdge from="you-loc" to="server-loc" from-side="right" to-side="right" label="sync" :label-dx="32" :label-dy="0" />
+  <RoughEdge from="server-loc" to="you-loc" from-side="left" to-side="left" label="✓ just relays" :label-dx="-56" :label-dy="0" stroke="rgba(52, 211, 153, 0.8)" />
+</RoughSvg>
 
-<span v-mark="{ type: 'underline', color: '#ff6bed' }" class="font-bold">YOU</span> are the owner
+<div class="mt-3 text-sm op-70">
 
-Server is a utility
-
-</Card>
-
-<div class="mt-4 text-sm op-70">
-
-Server can't reject your write → it just relays
-
-No foreign kill switch - your data, your jurisdiction
+Server can't reject → your data, your jurisdiction
 
 </div>
 
@@ -935,12 +932,13 @@ No foreign kill switch - your data, your jurisdiction
 
 <!--
 Offline-first: "how do I keep working without server?"
-Server = owner. Client = cache.
+Server = owner. Client = cache. Server rejects your write -> you roll back.
 
-Local-first: "why does the server own my data AT ALL?"
+[click] Local-first: "why does the server own my data AT ALL?"
 
 [look up]
-YOU are the owner. Server = utility. Can't reject your writes.
+Same two boxes -- ownership flipped. YOU are the owner. Server = utility.
+Can't reject your writes -- it just relays.
 No foreign kill switch -- your data stays in YOUR jurisdiction.
 
 TRANSITION: Enough theory -- let's build one.
