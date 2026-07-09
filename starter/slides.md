@@ -1961,7 +1961,7 @@ TRANSITION: So what if user control is non-negotiable for you?
 
 <div class="grid grid-cols-3 gap-6 mt-6">
 
-<Card v-click="1" variant="muted" size="lg">
+<Card variant="muted" size="lg">
 
 <div class="text-sm font-bold text-brand mb-2 flex items-center gap-2"><div class="i-ph-graph-bold" /> No server at all</div>
 
@@ -1973,7 +1973,7 @@ TRANSITION: So what if user control is non-negotiable for you?
 
 </Card>
 
-<Card v-click="2" variant="muted" size="lg">
+<Card variant="muted" size="lg">
 
 <div class="text-sm font-bold text-brand mb-2 flex items-center gap-2"><div class="i-ph-database-bold" /> Your own Postgres</div>
 
@@ -1985,7 +1985,7 @@ TRANSITION: So what if user control is non-negotiable for you?
 
 </Card>
 
-<Card v-click="3" variant="muted" size="lg">
+<Card variant="muted" size="lg">
 
 <div class="text-sm font-bold text-brand mb-2 flex items-center gap-2"><div class="i-ph-lock-open-bold" /> Dexie Cloud, but open</div>
 
@@ -1999,7 +1999,7 @@ TRANSITION: So what if user control is non-negotiable for you?
 
 </div>
 
-<div v-click="4" class="mt-6 text-center text-sm op-70">
+<div class="mt-6 text-center text-sm op-70">
 
 The trade-off: **you** operate more of it. Dexie Cloud's convenience is exactly what the license buys.
 
