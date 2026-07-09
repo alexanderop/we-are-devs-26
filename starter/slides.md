@@ -1936,8 +1936,6 @@ TRANSITION: If your app fits -- here's what you can do today.
 -->
 
 ---
-clicks: 4
----
 
 # What You Can Do Today
 
@@ -1949,14 +1947,14 @@ Idealists define vision, pragmatists build infrastructure.
 
 [look up] Pragmatist phase. Tools not perfect. Good enough to START.
 
-CLICK -- Pick a sync engine. Dexie = IndexedDB you already know, sync one addon away.
+Pick a sync engine. Dexie = IndexedDB you already know, sync one addon away.
 
-CLICK -- Add a DOWNLOAD button. Export data. Simplest local-first gesture.
+Add a DOWNLOAD button. Export data. Simplest local-first gesture.
 
-CLICK -- Watch this space. Generic sync protocol coming.
+Watch this space. Generic sync protocol coming.
 Upgrade = config change, not rewrite.
 
-CLICK -- [look up] Not betting on a vendor. Betting on a PATTERN.
+[look up] Not betting on a vendor. Betting on a PATTERN.
 
 TRANSITION: One more thing...
 -->
@@ -2042,6 +2040,8 @@ transition: fade
 </Card>
 
 </div>
+
+<img src="/alexop-mascot.png" alt="alexop.dev hamster mascot" class="absolute bottom-16 right-8 w-36 rotate-6 drop-shadow-lg" />
 
 <!--
 [breathe] [look up]

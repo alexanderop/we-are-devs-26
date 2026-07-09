@@ -2,15 +2,12 @@
 import RoughRect from './RoughRect.vue'
 import RoughLine from './RoughLine.vue'
 import RoughArrow from './RoughArrow.vue'
-import { useClickVisibility } from '../composables/useClickVisibility'
 import { EDGE_STROKE } from '../constants/colors'
 
 const { roughness = 1.2, seed = 400 } = defineProps<{
   roughness?: number
   seed?: number
 }>()
-
-const { isVisible } = useClickVisibility()
 
 // Layout constants
 const colW = 230
@@ -47,7 +44,7 @@ const footerY = 275
     preserveAspectRatio="xMidYMid meet"
   >
     <!-- ═══════ Column 1: Pick Your Sync Engine ═══════ -->
-    <g class="three-steps__el" :class="{ '--hidden': !isVisible(1) }">
+    <g class="three-steps__el">
       <!-- Title -->
       <text
         :x="col1 + colW / 2"
@@ -143,7 +140,7 @@ const footerY = 275
     </g>
 
     <!-- ═══════ Column 2: Let Users Export Data ═══════ -->
-    <g class="three-steps__el" :class="{ '--hidden': !isVisible(2) }">
+    <g class="three-steps__el">
       <!-- Title -->
       <text
         :x="col2 + colW / 2"
@@ -260,7 +257,7 @@ const footerY = 275
     </g>
 
     <!-- ═══════ Column 3: Watch This Space ═══════ -->
-    <g class="three-steps__el" :class="{ '--hidden': !isVisible(3) }">
+    <g class="three-steps__el">
       <!-- Title -->
       <text
         :x="col3 + colW / 2"
@@ -379,7 +376,7 @@ const footerY = 275
     </g>
 
     <!-- ═══════ Footer ═══════ -->
-    <g class="three-steps__el" :class="{ '--hidden': !isVisible(4) }">
+    <g class="three-steps__el">
       <!-- Dashed divider -->
       <RoughLine
         :x1="20"
@@ -414,14 +411,6 @@ const footerY = 275
   height: auto;
   display: block;
   margin: auto;
-}
-
-.three-steps__el {
-  transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.three-steps__el.--hidden {
-  opacity: 0;
 }
 
 .three-steps__title {
