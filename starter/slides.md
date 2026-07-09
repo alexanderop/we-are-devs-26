@@ -24,6 +24,21 @@ backgroundSize: contain
 </div>
 
 ---
+layout: center
+hideFooter: true
+---
+
+<div class="flex flex-col items-center gap-6">
+  <div class="text-2xl font-bold">Scan to follow along</div>
+  <Card glow class="!p-4">
+    <div class="bg-white p-3 rounded-lg">
+      <img src="/slides-qr.png" class="w-72 h-72" />
+    </div>
+  </Card>
+  <div class="text-sm op-60">alexanderop.github.io/we-are-devs-26</div>
+</div>
+
+---
 
 <PartSlide title="How to Build Local-First Apps with Vue" subtitle="WeAreDevelopers 2026 - Alexander Opalic" />
 
