@@ -1150,7 +1150,7 @@ clicks: 1
   title="~/vue-dexie-todo"
   stepped
   :lines="[
-    { cmd: 'npx dexie-cloud create', output: 'Creating database...\n✔ Database created: https://zy02f1.dexie.cloud\n✔ dexie-cloud.json + dexie-cloud.key written' },
+    { cmd: 'npx dexie-cloud create', output: 'Enter your email address: you@example.com\nEnter OTP: ******\nCreating database...\n✔ Database created: https://zy02f1.dexie.cloud\n✔ dexie-cloud.json + dexie-cloud.key written' },
     { cmd: 'npx dexie-cloud whitelist http://localhost:5173', output: '✔ Origin whitelisted' },
   ]"
 />
@@ -1164,7 +1164,7 @@ Two commands. That's the entire backend setup. <span class="text-brand">Add both
 <!--
 One thing before the code: Dexie Cloud IS a server -- you just don't write it.
 
-npx dexie-cloud create -- provisions your database, gives you a URL.
+npx dexie-cloud create -- logs you in with an emailed OTP, then provisions your database and gives you a URL.
 
 CLICK -- whitelist your dev origin. Done.
 
