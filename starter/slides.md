@@ -1228,7 +1228,7 @@ activeFile: db.ts
 tabs: db.ts
 step: 1/4 Database
 transition: fade
-clicks: 4
+clicks: 2
 files: |
   src
     main.ts
@@ -1243,10 +1243,6 @@ files: |
 ---
 
 ````md magic-move {lines: true}
-```ts
-// db.ts
-import Dexie, { type Table } from 'dexie'
-```
 ```ts
 // db.ts
 import Dexie, { type Table } from 'dexie'
@@ -1271,25 +1267,6 @@ export interface Todo {
 }
 
 // One class = one database
-export class TodoDB extends Dexie {
-  todos!: Table<Todo>
-
-  constructor() {
-    super('TodoDB')
-  }
-}
-```
-```ts
-// db.ts
-import Dexie, { type Table } from 'dexie'
-
-export interface Todo {
-  id?: string
-  title: string
-  completed: boolean
-  createdAt: Date
-}
-
 export class TodoDB extends Dexie {
   todos!: Table<Todo>
 
@@ -1331,13 +1308,9 @@ export const db = new TodoDB()
 ````
 
 <!--
-We start with one import. Dexie plus the Table type - that's all you need.
+We start with the shape. Plain TypeScript interface - no decorators, no special base class, no schema DSL.
 
-CLICK: The Todo interface. Plain TypeScript. No decorators, no special base class, no schema DSL.
-
-CLICK: The database class. One class extends Dexie, one typed table property. This IS your database.
-
-CLICK: The schema. version(1).stores - and look at '@id'. The @ prefix tells Dexie to generate globally unique IDs. THAT's what makes records safe to create on any device without colliding. Note: you only list INDEXED fields here - not every field.
+CLICK: The database class. One class extends Dexie, one typed table property, and the schema - version(1).stores. Look at '@id': the @ prefix tells Dexie to generate globally unique IDs. THAT's what makes records safe to create on any device without colliding. Note: you only list INDEXED fields here - not every field.
 
 CLICK: Export a singleton. That's the entire database layer. No migrations folder, no docker-compose, no connection pool.
 
@@ -1351,7 +1324,7 @@ activeFile: db.ts
 tabs: db.ts
 step: 2/4 Cloud Sync
 transition: fade
-clicks: 3
+clicks: 2
 files: |
   src
     main.ts
@@ -1403,25 +1376,6 @@ export class TodoDB extends Dexie {
 }
 
 export const db = new TodoDB()
-```
-```ts
-// db.ts - point it at your database
-import Dexie, { type Table } from 'dexie'
-import dexieCloud from 'dexie-cloud-addon'
-
-export class TodoDB extends Dexie {
-  todos!: Table<Todo>
-
-  constructor() {
-    super('TodoDB', { addons: [dexieCloud] })
-
-    this.version(1).stores({
-      todos: '@id, title, completed, createdAt',
-    })
-  }
-}
-
-export const db = new TodoDB()
 
 db.cloud.configure({
   databaseUrl: import.meta.env.VITE_DEXIE_CLOUD_URL,
@@ -1461,9 +1415,7 @@ export const logout = () => db.cloud.logout()
 <!--
 Same file - watch how little changes.
 
-CLICK: Import the addon, pass it to the constructor. ONE option - your local database is now a sync client. Same API, same queries.
-
-CLICK: configure - point it at the database URL from the CLI. requireAuth: users log in before syncing. There's also tryUseServiceWorker for background sync.
+CLICK: Import the addon, pass it to the constructor, and configure it with your database URL from the CLI. Two moves - your local database is now a sync client. requireAuth: users log in before syncing.
 
 CLICK: And auth is already there. db.cloud.login() runs a full email OTP flow - no Auth0, no OAuth setup, no session middleware. currentUser is an observable you can bind to your UI.
 
@@ -1479,7 +1431,7 @@ activeFile: useTodos.ts
 tabs: db.ts, useTodos.ts
 step: 3/4 Composable
 transition: fade
-clicks: 5
+clicks: 3
 openFolders: src, composables
 files: |
   src
@@ -1495,14 +1447,6 @@ files: |
 ---
 
 ````md magic-move {lines: true}
-```ts
-// composables/useTodos.ts
-import { computed, ref } from 'vue'
-import { liveQuery } from 'dexie'
-import { useObservable } from '@vueuse/rxjs'
-import { from } from 'rxjs'
-import { db, type Todo } from '@/db'
-```
 ```ts
 // composables/useTodos.ts
 import { computed, ref } from 'vue'
@@ -1527,26 +1471,6 @@ export function useTodos() {
   // liveQuery re-runs on every change - local OR synced
   const todos = useObservable<Todo[]>(
     from(liveQuery(() => db.todos.orderBy('createdAt').toArray())),
-  )
-}
-```
-```ts
-// composables/useTodos.ts
-import { computed, ref } from 'vue'
-import { liveQuery } from 'dexie'
-import { useObservable } from '@vueuse/rxjs'
-import { from } from 'rxjs'
-import { db, type Todo } from '@/db'
-
-export function useTodos() {
-  const todos = useObservable<Todo[]>(
-    from(liveQuery(() => db.todos.orderBy('createdAt').toArray())),
-  )
-
-  // Plain Vue reactivity - nothing Dexie-specific here
-  const newTodoTitle = ref('')
-  const pendingTodos = computed(
-    () => todos.value?.filter(t => !t.completed) ?? [],
   )
 }
 ```
@@ -1594,28 +1518,27 @@ export function useTodos() {
 
   async function addTodo() { /* db.todos.add(...) */ }
 
+  // Plain Vue on top - one-liners, nothing Dexie-specific
+  const pendingTodos = computed(
+    () => todos.value?.filter(t => !t.completed) ?? [],
+  )
   const toggleTodo = (todo: Todo) =>
     db.todos.update(todo.id!, { completed: !todo.completed })
-
   const deleteTodo = (id: string) => db.todos.delete(id)
 
-  return { todos, newTodoTitle, addTodo, toggleTodo, deleteTodo }
+  return { todos, newTodoTitle, addTodo, toggleTodo, deleteTodo, pendingTodos }
 }
 ```
 ````
 
 <!--
-The composable - this is where Vue devs feel at home.
-
-CLICK: A standard composable. No provider component, no app-level plugin. Just a function.
+The composable - this is where Vue devs feel at home. A standard function, no provider component, no app-level plugin.
 
 CLICK: The reactive read. liveQuery from Dexie, converted to a Vue ref with useObservable from VueUse. This query re-emits when YOU write - AND when a change syncs in from another device. Same pipeline.
 
-CLICK: Plain Vue on top. A ref for the input, computed for derived lists. Nothing Dexie-specific.
-
 CLICK: addTodo. db.todos.add - writes to IndexedDB. Instant. Offline-safe. The cloud addon queues and syncs it in the background. No try/catch-rollback dance.
 
-CLICK: Toggle and delete are one-liners. Return reactive state. That's the ENTIRE data layer.
+CLICK: Toggle, delete, and a computed for pending - one-liners on the same table. Return reactive state. That's the ENTIRE data layer.
 
 TRANSITION: The component is almost boring now...
 -->
@@ -1627,7 +1550,7 @@ activeFile: TodoList.vue
 tabs: useTodos.ts, TodoList.vue
 step: 4/4 Component
 transition: fade
-clicks: 3
+clicks: 2
 openFolders: src, composables, components
 files: |
   src
@@ -1678,7 +1601,7 @@ const { todos, newTodoTitle, addTodo, toggleTodo, deleteTodo }
 </template>
 ```
 ```vue
-<!-- components/TodoList.vue -->
+<!-- components/TodoList.vue - complete component -->
 <script setup lang="ts">
 import { useTodos } from '@/composables/useTodos'
 
@@ -1706,40 +1629,14 @@ const { todos, newTodoTitle, addTodo, toggleTodo, deleteTodo }
   </form>
 </template>
 ```
-```vue
-<!-- components/TodoList.vue - complete component -->
-<script setup lang="ts">
-import { useTodos } from '@/composables/useTodos'
-
-const { todos, newTodoTitle, addTodo, toggleTodo, deleteTodo }
-  = useTodos()
-</script>
-
-<template>
-  <ul>
-    <li v-for="todo in todos" :key="todo.id">
-      <input type="checkbox" :checked="todo.completed"
-        @change="toggleTodo(todo)" />
-      {{ todo.title }}
-      <button @click="deleteTodo(todo.id!)">✕</button>
-    </li>
-  </ul>
-  <form @submit.prevent="addTodo">
-    <input v-model="newTodoTitle" placeholder="What needs doing?" />
-    <button type="submit">Add</button>
-  </form>
-</template>
-```
 ````
 
 <!--
 The component. One destructure from the composable - all logic lives there.
 
-CLICK: The template. A plain v-for. But remember: this list updates when you write locally AND when your phone syncs a change in. Same ref, same v-for.
+CLICK: The template. A plain v-for for the list - remember, it updates when you write locally AND when your phone syncs a change in. Then a form: v-model plus submit, no loading state, no error rollback, no store.
 
-CLICK: The form. v-model plus submit. No loading state, no error rollback, no store.
-
-CLICK: The complete component. Look how small it is. Any Vue dev could read this - except it's offline-capable and multi-device.
+CLICK: That's the complete component. Any Vue dev could read this - except it's offline-capable and multi-device.
 
 TRANSITION: One question left - what happens when two devices disagree?
 -->
